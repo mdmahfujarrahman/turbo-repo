@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "title": "Complete the todo app setup",
+    "completed": false
+  },
+  {
+    "id": 2,
+    "title": "Understand clean architecture",
+    "completed": true
+  },
+  {
+    "id": 3,
+    "title": "Create API logic for todos",
+    "completed": true
+  }
+]
