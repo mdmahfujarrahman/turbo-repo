@@ -30,11 +30,11 @@ export class TodosService {
    * getTodos: Fetches todos from the adapter and applies domain logic.
    * @returns Processed todos after applying business rules.
    */
-  async getTodos(): Promise<Todo[]> {
+  async getTodos(filterType:string): Promise<Todo[]> {
     // Step 1: Fetch raw todos from the adapter
     const rawTodos = await this.adapter.fetchTodos();
     // Step 2: Apply domain logic to process the todos
-    const processedTodos = this.logic.filterCompletedTodos(rawTodos);
+    const processedTodos = this.logic.getAllTodos(rawTodos, filterType);
     // Step 3: Return the processed todos or an empty array
     this.store.setTodos(processedTodos);
     return this.store.todos;

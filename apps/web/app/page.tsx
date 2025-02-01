@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { todosService } from "@repo/core";
+import { TodoFilterList, todosService } from "@repo/core";
 import { Todo } from "@repo/core/domain/interfaces/Todo";
 import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
@@ -11,16 +11,17 @@ import { Tab } from "@repo/ui/tab";
 const TodoList = () => {
   const router = useRouter();
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filterType, setFilterType] = useState<string>("All");
 
   useEffect(() => {
     // Function to fetch todos from the service and update the store
-    const loadTodos = async () => {
-      const todosData = await todosService.getTodos(); // Fetch todos
+    const loadTodos = async (filterType: string) => {
+      const todosData = await todosService.getTodos(filterType); // Fetch todos
       setTodos(todosData); // Update Zustand store
     };
 
-    loadTodos();
-  }, []);
+    loadTodos(filterType);
+  }, [filterType]);
 
   return (
     <section
@@ -31,46 +32,35 @@ const TodoList = () => {
         height: "100vh",
       }}
     >
-      <div style={{ width: "700px", margin: "0 auto" }}>
+      <div style={{ width: "500px", margin: "0 auto" }}>
         {todos.length === 0 && <div>Data not found</div>}
 
         <Card className="todo-card">
           <Tab className="tabs">
-            <Button
-              style={{
-                backgroundColor: "salmon",
-                color: "white",
-                padding: "5px 14px",
-                borderRadius: "6px",
-                marginTop: "20px",
-              }}
-              onClick={() => router.push("/new")}
-            >
-              Create New Todo
-            </Button>
+            {TodoFilterList?.map((data) => (
+              <Button
+                key={data?.id}
+                style={{ padding: "10px", cursor: "pointer" }}
+                onClick={() => setFilterType(data?.name)}
+                className={`tab ${filterType === data?.name ? "active" : ""}`}
+              >
+                {data?.name}
+              </Button>
+            ))}
           </Tab>
-
           {todos.length > 0 && (
-            <ul style={{ listStyle: "none", padding: 0 }}>
-              {todos.map((data: Todo) => (
+            <ul className="todo-list">
+              {todos.map((todo) => (
                 <li
-                  key={data.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: "10px",
-                    padding: "10px",
-                    border: "1px solid #ddd",
-                    borderRadius: "6px",
-                  }}
+                  key={todo.id}
+                  className={`todo-item ${todo.completed ? "completed" : ""}`}
                 >
-                  <div style={{ fontSize: "18px" }}>{data.title}</div>
+                  <p>{todo.title}</p>
                   <div>
                     <input
                       type="checkbox"
-                      checked={data.completed}
-                      onChange={(e) => console.log(data.id, e.target.checked)}
+                      checked={todo.completed}
+                      onChange={(e) => console.log(todo.id, e.target.checked)}
                       style={{ transform: "scale(1.2)", cursor: "pointer" }}
                     />
                   </div>
@@ -79,19 +69,26 @@ const TodoList = () => {
             </ul>
           )}
         </Card>
-
-        <Button
+        <div
           style={{
-            backgroundColor: "salmon",
-            color: "white",
-            padding: "5px 14px",
-            borderRadius: "6px",
-            marginTop: "20px",
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
           }}
-          onClick={() => router.push("/new")}
         >
-          Create New Todo
-        </Button>
+          <Button
+            style={{
+              backgroundColor: "salmon",
+              color: "white",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              marginTop: "20px",
+            }}
+            onClick={() => router.push("/new")}
+          >
+            Create New Todo
+          </Button>
+        </div>
       </div>
     </section>
   );

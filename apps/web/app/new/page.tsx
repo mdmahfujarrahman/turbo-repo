@@ -1,6 +1,7 @@
 "use client";
 
 import { todosService } from "@repo/core";
+import { Button } from "@repo/ui/button";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -16,6 +17,11 @@ const CreateTodoForm = () => {
 
     // AddTodo service call
     try {
+      if (!formData.title) {
+        alert("Title is required");
+        return;
+      }
+
       const newTodo = {
         title: formData.title,
         completed: formData.isMark,
@@ -98,20 +104,41 @@ const CreateTodoForm = () => {
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
+        <div
           style={{
-            backgroundColor: "salmon",
-            color: "white",
-            padding: "10px 20px",
-            border: "none",
-            borderRadius: "6px",
-            fontSize: "16px",
-            cursor: "pointer",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          Submit
-        </button>
+          <Button
+            style={{
+              backgroundColor: "salmon",
+              color: "white",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              marginTop: "20px",
+            }}
+            onClick={() => router.push("/")}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            type="submit"
+            style={{
+              backgroundColor: "blue",
+              color: "white",
+              padding: "10px 20px",
+              border: "none",
+              borderRadius: "6px",
+              fontSize: "16px",
+              cursor: "pointer",
+            }}
+          >
+            Submit
+          </Button>
+        </div>
       </form>
     </div>
   );
