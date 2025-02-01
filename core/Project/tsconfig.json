@@ -3,6 +3,10 @@
   "compilerOptions": {
     "outDir": "dist"
   },
-  "include": ["application/**/*.ts", "domain/**/*.ts", "infrastructure/**/*.ts"],
+  "include": [
+    "application/**/*.ts",
+    "domain/**/*.ts",
+    "infrastructure/**/*.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }
