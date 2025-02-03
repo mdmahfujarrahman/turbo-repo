@@ -1,5 +1,9 @@
 import { ITodosLogic } from "../interfaces/ITodosLogic";
-import { Todo } from "../interfaces/Todo";
+import { Todo, TodoSummary } from "../interfaces/Todo";
+
+
+
+
 
 export class TodosLogic implements ITodosLogic {
   /**
@@ -8,23 +12,29 @@ export class TodosLogic implements ITodosLogic {
    * @returns {Todo[]} - Array of completed todos.
    */
 
-
-
   filterCompletedTodos(todos: Todo[]): Todo[] {
     return todos.filter((todo) => todo.completed);
   }
-
   filterPendingTodos(todos: Todo[]): Todo[] {
     return todos.filter((todo) => !todo.completed);
   }
-  getAllTodos(todos: Todo[], filterType:string): Todo[] {
+  getAllTodos(todos: Todo[], filterType: string): Todo[] {
     if (filterType === "All") {
       return todos;
     } else if (filterType === "Completed") {
       return this.filterCompletedTodos(todos);
     } else if (filterType === "Pending") {
       return this.filterPendingTodos(todos);
-    }
+    } 
     return todos;
+  }
+  getSummary(todos: Todo[]): TodoSummary {
+    const info = {
+      total: todos?.length,
+      completed: this.filterCompletedTodos(todos)?.length,
+      pending: this.filterPendingTodos(todos)?.length
+    }
+
+    return info
   }
 }

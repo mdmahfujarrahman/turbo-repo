@@ -12,12 +12,17 @@ export interface ITodosApiAdapter {
    */
   fetchTodos(): Promise<Todo[]>;
 
+  fetchTodo(id: number): Promise<Todo>;
+
   /**
    * Adds a new TODO item.
    * @param {{ title: string; completed: boolean }} data - The TODO object to create.
    * @returns {Promise<Todo>} - A promise resolving to the created TODO object.
    */
   addTodo(data: { title: string; completed: boolean }): Promise<Todo>;
+
+
+  toggleTodo(id: number): Promise<Todo[]>;
 
   /**
    * Deletes a TODO item by its ID.

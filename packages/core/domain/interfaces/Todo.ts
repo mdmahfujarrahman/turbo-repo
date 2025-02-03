@@ -9,3 +9,9 @@ export interface TodoFilterTypes {
   id: number,
   name: string
 }
+
+export interface TodoSummary{
+  total: number,
+  completed: number,
+  pending: number
+}

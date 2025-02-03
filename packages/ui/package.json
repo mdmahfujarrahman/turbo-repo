@@ -5,7 +5,9 @@
   "exports": {
     "./button": "./src/button.tsx",
     "./card": "./src/card.tsx",
-    "./tab": "./src/tab.tsx"
+    "./tab": "./src/tab.tsx",
+    "./section": "./src/section.tsx",
+    "./global.css": "./styles/globals.css"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

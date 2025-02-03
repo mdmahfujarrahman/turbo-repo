@@ -30,7 +30,7 @@ export class TodosService {
    * getTodos: Fetches todos from the adapter and applies domain logic.
    * @returns Processed todos after applying business rules.
    */
-  async getTodos(filterType:string): Promise<Todo[]> {
+  async getTodos(filterType: string): Promise<Todo[]> {
     // Step 1: Fetch raw todos from the adapter
     const rawTodos = await this.adapter.fetchTodos();
     // Step 2: Apply domain logic to process the todos
@@ -51,6 +51,13 @@ export class TodosService {
 
     // Step 2: Return the added todo
     return newTodo;
+  }
+
+
+  async toggleTodo(id: number): Promise<Todo[]> {
+    const rawTodos = await this.adapter.toggleTodo(id);
+    this.store.setTodos(rawTodos);
+    return this.store.todos;
   }
 
   /**

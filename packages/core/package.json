@@ -1,7 +1,11 @@
 {
   "name": "@repo/core",
   "version": "1.0.0",
-  "main": "index.ts",
+  "exports": {
+    "./domain": "./domain/index.ts",
+    "./application": "./application/index.ts",
+    "./infrastructure": "./infrastructure/index.ts"
+  },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit"

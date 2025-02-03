@@ -6,7 +6,7 @@ import { TodosService } from "./TodosService";
 
 
 // Step 1: Define Base URL
-const BASE_URL = "/";
+const BASE_URL = "http://localhost:3000";
 
 // Step 2: Create AxiosHttpClient instance
 const httpClient = new AxiosHttpClient(BASE_URL);

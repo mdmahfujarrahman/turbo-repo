@@ -2,11 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { TodoFilterList, todosService } from "@repo/core";
-import { Todo } from "@repo/core/domain/interfaces/Todo";
 import { Button } from "@repo/ui/button";
-import { Card } from "@repo/ui/card";
 import { Tab } from "@repo/ui/tab";
+import { Card } from "@repo/ui/card";
+import { Todo, TodoFilterList } from "@repo/core/domain";
+import { todosService } from "@repo/core/application";
+import { Section } from "@repo/ui/section";
 
 const TodoList = () => {
   const router = useRouter();
@@ -14,17 +15,25 @@ const TodoList = () => {
   const [filterType, setFilterType] = useState<string>("All");
 
   useEffect(() => {
-    // Function to fetch todos from the service and update the store
     const loadTodos = async (filterType: string) => {
-      const todosData = await todosService.getTodos(filterType); // Fetch todos
-      setTodos(todosData); // Update Zustand store
+      const todosData = await todosService.getTodos(filterType);
+      setTodos(todosData);
     };
 
     loadTodos(filterType);
   }, [filterType]);
 
+  const toggleTodos = async (id: number) => {
+    try {
+      const todosData = await todosService.toggleTodo(id);
+      setTodos(todosData);
+    } catch (error) {
+      alert("something wrong");
+    }
+  };
+
   return (
-    <section
+    <Section
       style={{
         display: "flex",
         justifyContent: "center",
@@ -33,8 +42,6 @@ const TodoList = () => {
       }}
     >
       <div style={{ width: "500px", margin: "0 auto" }}>
-        {todos.length === 0 && <div>Data not found</div>}
-
         <Card className="todo-card">
           <Tab className="tabs">
             {TodoFilterList?.map((data) => (
@@ -59,7 +66,10 @@ const TodoList = () => {
                   <div>
                     <input
                       type="checkbox"
-                      checked={todo.completed}
+                      checked={todo?.completed}
+                      onClick={() => {
+                        toggleTodos(todo?.id);
+                      }}
                       onChange={(e) => console.log(todo.id, e.target.checked)}
                       style={{ transform: "scale(1.2)", cursor: "pointer" }}
                     />
@@ -67,6 +77,17 @@ const TodoList = () => {
                 </li>
               ))}
             </ul>
+          )}
+          {todos.length === 0 && (
+            <h4
+              style={{
+                textAlign: "center",
+                color: "black",
+                padding: "4px"
+              }}
+            >
+              No Todos
+            </h4>
           )}
         </Card>
         <div
@@ -77,20 +98,14 @@ const TodoList = () => {
           }}
         >
           <Button
-            style={{
-              backgroundColor: "salmon",
-              color: "white",
-              padding: "10px 20px",
-              borderRadius: "6px",
-              marginTop: "20px",
-            }}
+            className="primary-button"
             onClick={() => router.push("/new")}
           >
             Create New Todo
           </Button>
         </div>
       </div>
-    </section>
+    </Section>
   );
 };
 

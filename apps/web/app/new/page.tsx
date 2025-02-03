@@ -1,6 +1,6 @@
 "use client";
 
-import { todosService } from "@repo/core";
+import { todosService } from "@repo/core/application";
 import { Button } from "@repo/ui/button";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";

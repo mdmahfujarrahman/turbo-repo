@@ -24,8 +24,11 @@ export class AxiosApiAdapter implements ITodosApiAdapter {
    * @returns {Promise<Todo[]>} - A promise resolving to an array of Todo objects.
    */
   async fetchTodos(): Promise<Todo[]> {
-    // return await this.httpClient.get<Todo[]>("/todos").then((res) => res.data);
-    return TodosData;
+    return await this.httpClient.get<Todo[]>("/todos").then((res) => res.data);
+  }
+
+  async fetchTodo(id: number): Promise<Todo> {
+    return await this.httpClient.get<Todo>(`/todos/${id}`).then((res) => res.data);
   }
 
   /**
@@ -39,12 +42,27 @@ export class AxiosApiAdapter implements ITodosApiAdapter {
       title: data.title,
       completed: data.completed,
     };
-    TodosData.push(newTodo);
-    return newTodo;
-    // return await this.httpClient
-    //   .post<Todo>("/todos", data)
-    //   .then((res) => res.data);
+    // TodosData.push(newTodo);
+    // return newTodo;
+    return await this.httpClient
+      .post<Todo>("/todos", data)
+      .then((res) => res.data);
   }
+
+  async toggleTodo(id: number): Promise<Todo[]> {
+
+    const fetchTodo = await this.fetchTodo(id)
+
+    await this.httpClient.put(`/todos/${id}`, {
+      id: fetchTodo?.id,
+      title: fetchTodo.title,
+      completed: !fetchTodo.completed
+    })
+
+    return await this.httpClient.get<Todo[]>("/todos").then((res) => res.data);
+      
+  }
+
 
   /**
    * Deletes a TODO by its ID via the API.
